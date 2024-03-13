@@ -1,0 +1,55 @@
+#In master & worker run this commands
+install java in both the ec2 instances
+--------------------------------------
+
+
+In worker create ssh-keygen -t rsa
+create a file called Authorized_keys
+chmod 700 Authorized_keys
+
+-------------------------------------------------
+
+In Master after install java Download redhat package for jenkins through jenkins official website
+https://pkg.jenkins.io/redhat-stable/
+Start the jenkins service & configure the jenkins tool webpage or GUI
+Create Known_hosts folder in /var/lib/jenkins
+add IP of worker pub & Pvt
+
+________________________________________________________
+
+In jenkins GUI
+manage jenkin & congigure node
+name
+description
+remote - /home/ec2-user (slave Dir )
+labels - slave
+usage - use this as much has posible
+Launch method - launch agents via ssh
+Host - ip of slave (pvt)
+Credentials - SSH username with private key
+paste pemkey of slave
+Host Key Verification Strategy - Non-Verifying Verification Strategy
+save 
+
+NOTE: Dont use t2.micro
+
+Commands for Master
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+yum install java-17-amazon-corretto-devel.x86_64 
+yum install jenkins
+systemctl start jenkins.service 
+cd /var/lib/jenkins/
+vi known_hosts
+ssh-keyscan -H 43.204.230.214 >> known_hosts
+ssh-keyscan -H 172.31.11.145 >> known_hosts
+--------------------------------------------------
+Commands for worker
+
+yum install java-17-amazon-corretto-devel.x86_64 -y
+ssh-keygen -t rsa
+#vi authorized.keys
+cat pub.pub 
+vi authorized.keys
+chmod 700 authorized.keys
+cat authorized.keys
