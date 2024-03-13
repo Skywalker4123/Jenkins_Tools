@@ -1,0 +1,50 @@
+#In master & worker run this commands
+yum install maven -y 
+
+In Master commands
+
+wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+yum install jenkins -y
+systemctl start jenkins.service
+systemctl enable jenkins.service
+cat /var/lib/jenkins/secrets/initialAdminPassword (Jenkins initial configuration)
+vi /etc/ssh/sshd_config
+PubkeyAuthentication yes
+PasswordAuthentication yes
+systemctl restart sshd
+ssh-keygen
+
+ssh jenkins@Private IP of worker
+exit
+ssh-copy-id jenkins@Private IP of worker
+ssh jenkins@Private IP of worker
+
+In Worker Commands
+
+yum install maven -y
+useradd jenkins
+passwd jenkins
+vi /etc/ssh/sshd_config
+PubkeyAuthentication yes
+PasswordAuthentication yes
+systemctl restart sshd
+ssh-keygen
+
+Cross Check the jenkins user (ssh jenkins@Pub-IP of worker Instance ) on other instance ex: Master
+
+In jenkins GUI
+manage jenkin & congigure node
+name
+description
+remote - /home/jenkins (user we have created in worker)
+labels - slave
+usage - use this as much has posible
+Launch method - launch agents via ssh
+Host - ip of slave (pvt)
+Credentials - SSH with private key
+username - user jenkins
+PrivateKey - Master Node in that id_rsa key to be inserted
+Host Key Verification Strategy - Non-Verifying Verification Strategy
+save
+
