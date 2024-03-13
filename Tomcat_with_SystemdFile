@@ -1,0 +1,44 @@
+# This is tomcat systemd service file
+[Unit]
+Description=Apache Tomcat
+After=network.target
+
+[Service]
+Type=forking
+
+User=root
+Group=root
+
+ExecStart=/opt/apache-tomcat-9.0.84/bin/startup.sh
+ExecStop=/opt/apache-tomcat-9.0.84/bin/shutdown.sh
+
+[Install]
+WantedBy=multi-user.target
+
+--------------------------------------------------------------------------------------------------------------
+
+To setup we need
+1. java
+2. create a user and group 
+3. add the apache-tomcat-9.0.84 to group & change the permission of it
+4. create a file tomcat.service in /etc/systemd/system/tomcat.service
+
+---------------------------------------------------------------------------------------------------------------
+Commands:
+
+yum install java-11-amazon-corretto-devel.x86_64 -y
+useradd tomcat
+passwd tomcat 
+cd /opt/
+wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.84/bin/apache-tomcat-9.0.84.tar.gz
+tar -xzvf apache-tomcat-9.0.84.tar.gz && cd apache-tomcat-9.0.84 && rm -rf /opt/apache-tomcat-9.0.84.tar.gz && rm -rf apache-tomcat-9.0.84.tar.gz
+vi /etc/systemd/system/tomcat.service
+cd /opt
+chown tomcat:tomcat apache-tomcat-9.0.84 -R
+chmod 777 apache-tomcat-9.0.84 -R
+systemctl daemon-reload
+systemctl start tomcat.service 
+systemctl status tomcat.service 
+systemctl enable tomcat.service #This will kickin tomcat when the server is launched or started without user intervene
+systemctl stop tomcat.service 
+shutdown -h now
