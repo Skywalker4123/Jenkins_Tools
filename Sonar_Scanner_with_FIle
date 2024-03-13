@@ -1,0 +1,27 @@
+sonar-scanner 
+
+sudo wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+unzip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+vi sonar-scanner-5.0.1.3006-linux/conf/sonar-scanner.properties
+sonar.host.url=http://sonarqube.9000 uncomment the line starting with sonar.host.url  
+chmod +x sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner
+sudo ln -s /optsonar-scanner-5.0.1.3006/bin/sonar-scanner /usr/local/bin/sonar-scanner
+
+vi sonar-project.properties
+sonar.projectKey=<your_app_name>
+
+sonar.projectName=<your_app_name>
+
+sonar.projectVersion=1.0
+
+sonar.sources=. 
+
+# The value of the property must be the key of the language.
+
+sonar.language=java
+
+sonar.java.binaries=target/classes
+
+sonar.sourceEncoding=UTF-8
+
+sonar-scanner -D sonar.login=squ_d653781275cfb989e2c2cbef75602498280ee27d
